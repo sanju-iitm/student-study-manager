@@ -32,6 +32,8 @@ def tasks():
     tasks_list = Task.query.all()    
 
     return render_template("tasks.html", tasks=tasks_list)
+
+
 @app.route("/tasks/delete/<int:task_id>", methods=["POST"])
 def delete_task(task_id):
     task = Task.query.get_or_404(task_id)
@@ -40,6 +42,23 @@ def delete_task(task_id):
     db.session.commit()
 
     return redirect(url_for("tasks"))
+
+
+#update
+@app.route("/tasks/edit/<int:task_id>", methods=["GET", "POST"])
+def edit_task(task_id):
+    task = Task.query.get_or_404(task_id)
+
+    if request.method == "POST":
+        task.title = request.form.get("task")
+
+        if task.title:
+            db.session.commit()
+            return redirect(url_for("tasks"))
+
+    return render_template("edit_task.html", task=task)
+
+
 @app.route("/tasks/complete/<int:task_id>", methods=["POST"])
 def complete_task(task_id):
     task = Task.query.get_or_404(task_id)

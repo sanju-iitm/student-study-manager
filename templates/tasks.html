@@ -43,6 +43,9 @@
                       style="display: inline;">
                      <button type="submit">Delete</button>
                 </form>
+                <a href="{{ url_for('edit_task', task_id=task.id) }}">
+                    <button type="button">Edit</button>
+                </a>
             </li>
         {% endfor %}
     </ul>
