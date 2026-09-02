@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tasks</title>
+</head>
+
+<body>
+
+    <h1>My Study Tasks</h1>
+
+    <form method="POST">
+
+        <label for="task">Task:</label>
+        <input type="text" id="task" name="task" required>
+
+        <button type="submit">Add Task</button>
+
+    </form>
+
+    <h2>Task List</h2>
+    <ul>
+        {% for task in tasks %}
+            <li>
+                {% if task.completed %}
+                    <s>{{ task.title }}</s>
+                {% else %}
+                    {{ task.title }}
+                {% endif %}
+                <form method="POST" 
+                      action="{{ url_for('complete_task', task_id=task.id) }}" 
+                      style="display: inline;">
+                      {% if task.completed %}
+                     <button type="submit">Undo</button>
+                     {% else %}
+                     <button type="submit">Complete</button>
+                     {% endif %}
+                </form>
+
+                <form method="POST" 
+                      action="{{ url_for('delete_task', task_id=task.id) }}" 
+                      style="display: inline;">
+                     <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
