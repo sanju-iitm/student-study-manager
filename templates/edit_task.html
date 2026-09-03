@@ -21,6 +21,72 @@
             value="{{ task.title }}"
             required
         >
+        <br><br>
+        <label for="subject">Subject:</label>
+
+<select id="subject" name="subject">
+
+    <option value="MAD-1"
+        {% if task.subject == "MAD-1" %}selected{% endif %}>
+        MAD-1
+    </option>
+
+    <option value="MLP"
+        {% if task.subject == "MLP" %}selected{% endif %}>
+        MLP
+    </option>
+
+    <option value="DBMS"
+        {% if task.subject == "DBMS" %}selected{% endif %}>
+        DBMS
+    </option>
+
+    <option value="Python"
+        {% if task.subject == "Python" %}selected{% endif %}>
+        Python
+    </option>
+
+    <option value="Other"
+        {% if task.subject == "Other" %}selected{% endif %}>
+        Other
+    </option>
+
+</select>
+
+<br><br>
+        <label for="priority">Priority:</label>
+
+            <select id="priority" name="priority">
+
+            <option value="Low"
+                {% if task.priority == "Low" %}selected{% endif %}>
+                Low
+            </option>
+
+        <option value="Medium"
+            {% if task.priority == "Medium" %}selected{% endif %}>
+            Medium
+        </option>
+
+        <option value="High"
+            {% if task.priority == "High" %}selected{% endif %}>
+            High
+        </option>
+
+    </select>
+
+    <br><br>
+
+    <label for="due_date">Due Date:</label>
+
+    <input
+        type="date"
+        id="due_date"
+        name="due_date"
+        value="{{ task.due_date or '' }}"
+    >
+
+    <br><br>
 
         <button type="submit">Save Changes</button>
 

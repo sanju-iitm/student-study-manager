@@ -1,54 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Tasks</title>
+
+    <title>My Study Tasks</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
 
-    <h1>My Study Tasks</h1>
+<div class="container">
 
-    <form method="POST">
+    <div class="header">
+        <h1>Student Study & Task Manager</h1>
+        <p>Organize your study tasks and stay productive.</p>
+    </div>
 
-        <label for="task">Task:</label>
-        <input type="text" id="task" name="task" required>
 
-        <button type="submit">Add Task</button>
+    <div class="task-form">
 
-    </form>
+        <h2>Add New Task</h2>
 
-    <h2>Task List</h2>
-    <ul>
+        <form method="POST">
+
+            <input
+                type="text"
+                name="task"
+                placeholder="Enter task..."
+                required
+            >
+        <select name="subject">
+            <option value="MAD-1">MAD-1</option>
+            <option value="MLP">MLP</option>
+            <option value="DBMS">DBMS</option>
+            <option value="Python">Python</option>
+            <option value="Other">Other</option>
+        </select>
+
+            <select name="priority">
+
+                <option value="Low">Low</option>
+
+                <option value="Medium" selected>
+                    Medium
+                </option>
+
+                <option value="High">
+                    High
+                </option>
+
+            </select>
+
+            <input
+                type="date"
+                name="due_date"
+            >
+
+            <button type="submit" class="add-button">
+                Add Task
+            </button>
+
+        </form>
+
+    </div>
+    <div class="stats">
+
+    <div class="stat-card">
+        <h3>Total Tasks</h3>
+        <p>{{ total_tasks }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Completed</h3>
+        <p>{{ completed_tasks }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Pending</h3>
+        <p>{{ pending_tasks }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>High Priority</h3>
+        <p>{{ high_priority_tasks }}</p>
+    </div>
+
+</div>
+
+    <h2>My Tasks</h2>
+    <form method="GET" class="filter-form">
+
+    <input
+        type="text"
+        name="search"
+        placeholder="Search tasks..."
+        value="{{ search }}"
+    >
+
+    <select name="subject">
+        <option value="">All Subjects</option>
+        <option value="MAD-1">MAD-1</option>
+        <option value="MLP">MLP</option>
+        <option value="DBMS">DBMS</option>
+        <option value="Python">Python</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <select name="priority">
+        <option value="">All Priorities</option>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+    </select>
+
+    <select name="status">
+        <option value="">All Tasks</option>
+        <option value="pending">Pending</option>
+        <option value="completed">Completed</option>
+    </select>
+
+    <button type="submit" class="add-button">
+        Filter
+    </button>
+
+    <a href="{{ url_for('tasks') }}">
+        <button type="button">Clear</button>
+    </a>
+
+</form>
+
+    <div class="task-list">
+
         {% for task in tasks %}
-            <li>
+
+        <div class="task-card">
+
+            <div class="task-title">
+
                 {% if task.completed %}
+
                     <s>{{ task.title }}</s>
+
                 {% else %}
+
                     {{ task.title }}
+
                 {% endif %}
-                <form method="POST" 
-                      action="{{ url_for('complete_task', task_id=task.id) }}" 
-                      style="display: inline;">
-                      {% if task.completed %}
-                     <button type="submit">Undo</button>
-                     {% else %}
-                     <button type="submit">Complete</button>
-                     {% endif %}
+
+            </div>
+
+
+            <div class="task-info">
+                Subject: {{ task.subject or "Other" }}
+                    &nbsp; | &nbsp;
+                Priority:
+                <span class="priority">
+                    {{ task.priority }}
+                </span>
+
+                {% if task.due_date %}
+
+                    &nbsp; | &nbsp;
+
+                    Due: {{ task.due_date }}
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="task-actions">
+
+                <!-- Complete / Undo -->
+
+                <form method="POST"
+                      action="{{ url_for('complete_task', task_id=task.id) }}">
+
+                    {% if task.completed %}
+
+                        <button type="submit"
+                                class="complete-button">
+                            Undo
+                        </button>
+
+                    {% else %}
+
+                        <button type="submit"
+                                class="complete-button">
+                            Complete
+                        </button>
+
+                    {% endif %}
+
                 </form>
 
-                <form method="POST" 
-                      action="{{ url_for('delete_task', task_id=task.id) }}" 
-                      style="display: inline;">
-                     <button type="submit">Delete</button>
-                </form>
+
+                <!-- Edit -->
+
                 <a href="{{ url_for('edit_task', task_id=task.id) }}">
-                    <button type="button">Edit</button>
+
+                    <button type="button"
+                            class="edit-button">
+                        Edit
+                    </button>
+
                 </a>
-            </li>
+
+
+                <!-- Delete -->
+
+                <form method="POST"
+                      action="{{ url_for('delete_task', task_id=task.id) }}">
+
+                    <button type="submit"
+                            class="delete-button">
+                        Delete
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
         {% endfor %}
-    </ul>
+
+    </div>
+
+</div>
 
 </body>
 </html>
