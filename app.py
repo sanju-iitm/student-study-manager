@@ -127,7 +127,7 @@ def tasks():
 
     if request.method == "POST":
         task_title= request.form.get("task","").strip()
-        priority = request.form.get("priority","Medium").split()
+        priority = request.form.get("priority","Medium").strip()
         due_date = request.form.get("due_date","").strip()
         subject = request.form.get("subject","").strip()
 
