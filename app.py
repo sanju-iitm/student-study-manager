@@ -124,6 +124,9 @@ def tasks():
         return redirect(url_for("login"))
 
     user = User.query.filter_by(username=session["username"]).first()
+    if user is None:
+       session.pop("username", None)
+       return redirect(url_for("login"))
 
     if request.method == "POST":
         task_title= request.form.get("task","").strip()
