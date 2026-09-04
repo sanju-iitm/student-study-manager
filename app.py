@@ -549,6 +549,9 @@ def change_password():
     user = User.query.filter_by(
         username=session["username"]
     ).first()
+    if user is None:
+       session.pop("username", None)
+       return redirect(url_for("login"))
 
     if request.method == "POST":
 
