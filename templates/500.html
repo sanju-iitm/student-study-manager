@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server Error</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>500 - Something Went Wrong</h1>
+        <p>Sorry, an unexpected error occurred.</p>
+    </div>
+
+    <div class="task-form">
+        <a href="{{ url_for('tasks') }}">
+            <button type="button" class="add-button">
+                Back to Tasks
+            </button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

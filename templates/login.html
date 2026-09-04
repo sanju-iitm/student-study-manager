@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Student Study Manager</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<script>
+function togglePassword(id) {
+    const passwordField = document.getElementById(id);
+
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+    } else {
+        passwordField.type = "password";
+    }
+}
+</script>
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>Student Study Manager</h1>
+
+        <p>Login to manage your study tasks.</p>
+
+    </div>
+
+    <div class="task-form">
+
+        <h2>Login</h2>
+
+        <form method="POST">
+            {% if error %}
+            <p style="color: red;">{{ error }}</p>
+                {% endif %}
+            <label for="username">Username:</label>
+
+            <input
+                type="text"
+                id="username"
+                name="username"
+                required
+            >
+
+            <br><br>
+
+            <label for="password">Password:</label>
+
+            <input
+                type="password"
+                id="login-password"
+                name="password"
+                required
+            >
+            <label>
+            <input type="checkbox"
+            onclick="togglePassword('login-password')">
+                Show password
+            </label>
+            <br><br>
+            <label>
+            <input type="checkbox" name="remember">
+                Remember me
+            </label>
+            <br><br>
+
+            <button type="submit" class="add-button">
+                Login
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

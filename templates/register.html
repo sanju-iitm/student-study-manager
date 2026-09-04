@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - Student Study Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Show / Hide password
+    window.togglePassword = function (id) {
+        const passwordField = document.getElementById(id);
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+        } else {
+            passwordField.type = "password";
+        }
+    };
+
+
+    // Password strength
+    const passwordInput =
+        document.getElementById("register-password");
+
+    const strengthText =
+        document.getElementById("password-strength");
+
+
+    passwordInput.addEventListener("input", function () {
+
+        const password = passwordInput.value;
+
+        if (password.length === 0) {
+            strengthText.textContent = "";
+        }
+        else if (password.length < 8) {
+            strengthText.textContent =
+                "Weak - at least 8 characters required";
+        }
+        else if (password.length < 12) {
+            strengthText.textContent = "Medium";
+        }
+        else {
+            strengthText.textContent = "Strong";
+        }
+    });
+
+
+    // Confirm password
+    const confirmPassword =
+        document.getElementById("confirm-password");
+
+    const matchText =
+        document.getElementById("password-match");
+
+
+    confirmPassword.addEventListener("input", function () {
+
+        const password = passwordInput.value;
+
+        if (confirmPassword.value === "") {
+            matchText.textContent = "";
+        }
+        else if (password === confirmPassword.value) {
+            matchText.textContent = "Passwords match";
+        }
+        else {
+            matchText.textContent =
+                "Passwords do not match";
+        }
+    });
+
+});
+</script>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Create Account</h1>
+        <p>Register for Student Study & Task Manager</p>
+    </div>
+
+    <div class="task-form">
+
+        <form method="POST">
+            {% if error %}
+            <p style="color: red;">{{ error }}</p>
+            {% endif %}
+            <label>Username</label><br>
+            <input type="text" name="username" minlength="3" maxlength="30"
+              pattern="[A-Za-z0-9_]+"
+              title="Use only letters, numbers, and underscores." required>
+            <small>
+               3–30 characters. Letters, numbers, and underscores only.
+            </small>
+            <br><br>
+
+            <label>Password</label><br>
+             <input type="password" name="password" id="register-password" placeholder="Password" minlength="8" required>
+            <small>
+             Password must contain at least 8 characters.
+            </small>
+
+            <label>
+            <input type="checkbox"
+                onclick="togglePassword('register-password')">
+                Show password
+            </label>
+            <p id="password-strength"></p>
+
+            <br><br>
+
+            <label>Confirm Password</label><br>
+            <input type="password" name="confirm_password"
+              id="confirm-password"
+                  placeholder="Confirm Password" required>
+            <p id="password-match"></p>      
+
+            <label>
+             <input type="checkbox"
+              onclick="togglePassword('confirm-password')">
+             Show password
+            </label>
+            <button type="submit" class="add-button">
+                Register
+            </button>
+
+        </form>
+
+        <p>
+            Already have an account?
+            <a href="{{ url_for('login') }}">Login</a>
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>

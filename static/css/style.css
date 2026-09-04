@@ -158,3 +158,246 @@ button {
 .filter-form button {
     cursor: pointer;
 }
+.navbar {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    text-decoration: none;
+    margin-left: 15px;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+.status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+.completed-status {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.pending-status {
+    background: #fff3cd;
+    color: #664d03;
+}
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 20px 10px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .navbar a {
+        margin: 0 6px;
+    }
+
+    .header,
+    .task-form {
+        padding: 20px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 15px;
+    }
+
+    .stat-card p {
+        font-size: 24px;
+    }
+
+    .task-form input,
+    .task-form select {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .add-button {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-form input,
+    .filter-form select,
+    .filter-form button {
+        width: 100%;
+        margin: 0;
+    }
+
+    .task-actions form,
+    .task-actions a {
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+    .footer {
+    margin-top: 20px;
+    padding: 15px 10px;
+    font-size: 13px;}
+}
+
+.empty-state {
+    text-align: center;
+    padding: 30px 20px;
+    color: #6c757d;
+}
+
+.empty-state h3 {
+    margin: 0 0 8px;
+    color: #2c3e50;
+}
+
+.empty-state p {
+    margin: 0;
+}
+
+.flash-message {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.flash-message.success {
+    background: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+.flash-message.error {
+    background: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
+.overdue-status {
+    background: #f8d7da;
+    color: #842029;
+}
+.completed-task {
+    opacity: 0.7;
+    border-left-color: #198754;
+}
+
+.completed-task .task-title {
+    color: #6c757d;
+}
+.priority-high {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.priority-medium {
+    background: #fff3cd;
+    color: #664d03;
+}
+
+.priority-low {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+.priority-legend {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.priority-legend .priority {
+    margin: 0;
+}
+.clear-button {
+    background: #6c757d;
+    color: white;
+    text-decoration: none;
+    padding: 9px 14px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.clear-button:hover {
+    background: #5c636a;
+}
+.filter-button {
+    background: #2c3e50;
+    color: white;
+    font-weight: bold;
+}
+
+.filter-button:hover {
+    opacity: 0.9;
+}
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    color: #6c757d;
+    font-size: 14px;
+}
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #2c3e50;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    display: none;
+    z-index: 1000;
+}
+
+.back-to-top:hover {
+    opacity: 0.9;
+}
+.today-status {
+    background: #cff4fc;
+    color: #055160;
+}
+
+.quick-filter {
+    background: #e9ecef;
+    color: #2c3e50;
+    text-decoration: none;
+    padding: 9px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.quick-filter:hover {
+    background: #dee2e6;
+}

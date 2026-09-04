@@ -10,14 +10,48 @@
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-
+<button id="backToTop"
+        class="back-to-top"
+        aria-label="Back to top"
+        title="Back to top"
+        onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+    ↑
+</button>
 <body>
 
 <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash-message {{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <nav class="navbar">
+    <div>
+        <strong>Student Study Manager</strong>
+    </div>
 
+    <div>
+        <a href="{{ url_for('tasks') }}">Tasks</a>
+
+        <a href="{{ url_for('change_password') }}">
+            Change Password
+        </a>
+
+        <a href="{{ url_for('logout') }}"
+           onclick="return confirm('Are you sure you want to logout?');">
+            Logout
+        </a>
+    </div>
+    </nav>
     <div class="header">
         <h1>Student Study & Task Manager</h1>
-        <p>Organize your study tasks and stay productive.</p>
+        <p>Welcome, <strong>{{ session.get('username') }}</strong>👋</p>
+        <p>You have <strong>{{ total_tasks }}</strong> tasks in your account.</p>
+         
     </div>
 
 
@@ -88,10 +122,27 @@
         <h3>High Priority</h3>
         <p>{{ high_priority_tasks }}</p>
     </div>
+    <div class="stat-card">
+        <h3>Due Soon</h3>
+        <p>{{ due_soon_tasks }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Due Today</h3>
+        <p>{{ due_today_tasks }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Overdue</h3>
+        <p>{{ overdue_tasks }}</p>
+    </div>
 
 </div>
 
-    <h2>My Tasks</h2>
+    <h2>My Tasks ({{ tasks|length }})</h2>
+    <div class="priority-legend">
+    <span class="priority priority-high">High</span>
+    <span class="priority priority-medium">Medium</span>
+    <span class="priority priority-low">Low</span>
+</div>
     <form method="GET" class="filter-form">
 
     <input
@@ -122,116 +173,137 @@
         <option value="pending">Pending</option>
         <option value="completed">Completed</option>
     </select>
-
-    <button type="submit" class="add-button">
+    <select name="sort">
+    <option value="newest" {% if sort == "newest" %}selected{% endif %}>
+        Newest First
+    </option>
+    <option value="due" {% if sort == "due" %}selected{% endif %}>
+        Due Date
+    </option>
+    </select>
+    <button type="submit" class="filter-button">
         Filter
     </button>
 
     <a href="{{ url_for('tasks') }}">
-        <button type="button">Clear</button>
+        <button type="button" class="clear-button">Clear</button>
+    </a>
+    
+    <a href="{{ url_for('tasks', status='pending') }}" class="quick-filter">
+        Pending Tasks ({{ pending_tasks }})
+    </a>
+    <a href="{{ url_for('tasks', today='1') }}" class="quick-filter">
+     Due Today ({{ due_today_tasks }})
+    </a>
+    <a href="{{ url_for('tasks', due_soon='1') }}" class="quick-filter">
+      Due Soon ({{ due_soon_tasks }})
+    </a>
+    <a href="{{ url_for('tasks', overdue='1') }}" class="quick-filter">
+        Overdue Tasks ({{ overdue_tasks }})
+    </a>
+    <a href="{{ url_for('tasks') }}" class="quick-filter">
+        All Tasks ( {{ total_tasks }} )
     </a>
 
 </form>
 
     <div class="task-list">
-
+    {% if tasks %}
         {% for task in tasks %}
-
-        <div class="task-card">
+        <div class="task-card" {% if task.completed %}completed-task{% endif %}>
 
             <div class="task-title">
-
                 {% if task.completed %}
-
                     <s>{{ task.title }}</s>
-
+                    <span class="status completed-status">Completed</span>
                 {% else %}
-
                     {{ task.title }}
-
+                    <span class="status pending-status">Pending</span>
                 {% endif %}
-
             </div>
-
 
             <div class="task-info">
                 Subject: {{ task.subject or "Other" }}
-                    &nbsp; | &nbsp;
-                Priority:
-                <span class="priority">
+                 | Priority:
+                    <span class="priority priority-{{ task.priority|lower }}">
                     {{ task.priority }}
-                </span>
+                    </span>
 
                 {% if task.due_date %}
+                | Due: {{ task.due_date }}
 
-                    &nbsp; | &nbsp;
-
-                    Due: {{ task.due_date }}
-
+                    {% if not task.completed %}
+                    {% if task.due_date < today.strftime('%Y-%m-%d') %}
+                    <span class="status overdue-status">Overdue</span>
+                    {% elif task.due_date == today.strftime('%Y-%m-%d') %}
+                    <span class="status today-status">Due Today</span>
+                    {% elif task.due_date <= due_soon.strftime('%Y-%m-%d') %}
+                    <span class="status pending-status">Due Soon</span>
+                {% endif %}
+                {% endif %}
+                {% else %}
+                | Due: No deadline
                 {% endif %}
 
+                {% if task.created_at %}
+                    | Created: {{ task.created_at.strftime('%d-%m-%Y %H:%M') }}
+                {% endif %}
             </div>
-
 
             <div class="task-actions">
 
-                <!-- Complete / Undo -->
-
                 <form method="POST"
                       action="{{ url_for('complete_task', task_id=task.id) }}">
-
-                    {% if task.completed %}
-
-                        <button type="submit"
-                                class="complete-button">
+                    <button type="submit" class="complete-button" 
+                    onclick="return confirm('{% if task.completed %}Mark this task as pending?{% else %}Mark this task as completed?{% endif %}');">
+                        {% if task.completed %}
                             Undo
-                        </button>
-
-                    {% else %}
-
-                        <button type="submit"
-                                class="complete-button">
+                        {% else %}
                             Complete
-                        </button>
-
-                    {% endif %}
-
+                        {% endif %}
+                    </button>
                 </form>
 
-
-                <!-- Edit -->
-
                 <a href="{{ url_for('edit_task', task_id=task.id) }}">
-
-                    <button type="button"
-                            class="edit-button">
-                        Edit
-                    </button>
-
+                    <button type="button" class="edit-button">Edit</button>
                 </a>
-
-
-                <!-- Delete -->
 
                 <form method="POST"
                       action="{{ url_for('delete_task', task_id=task.id) }}">
-
                     <button type="submit"
-                            class="delete-button">
+                            class="delete-button"
+                            onclick="return confirm('Delete this task?');">
                         Delete
                     </button>
-
                 </form>
 
             </div>
 
         </div>
-
         {% endfor %}
 
+    {% else %}
+        <div class="task-card empty-state">
+        <h3>No tasks found</h3>
+        <p>Try changing your search or filters.</p>
     </div>
-
+    {% endif %}
 </div>
 
+</div>
+<footer class="footer">
+    Student Study & Task Manager
+</footer>
+<script>
+    const backToTop = document.getElementById("backToTop");
+
+    window.addEventListener("scroll", function () {
+        if (window.scrollY > 300) {
+            backToTop.style.display = "block";
+        } else {
+            backToTop.style.display = "none";
+        }
+    });
+</script>
 </body>
 </html>
