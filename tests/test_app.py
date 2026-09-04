@@ -1,9 +1,34 @@
 import sys
 import os
+import pytest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from app import app
+from app import app, db, User
+from werkzeug.security import generate_password_hash
+
+
+@pytest.fixture(autouse=True)
+def setup_test_database(tmp_path):
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + str(tmp_path / "test.db")
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+
+        user1 = User(
+            username="sanjay",
+            password_hash=generate_password_hash("12345678")
+        )
+
+        user2 = User(
+            username="sanjay123",
+            password_hash=generate_password_hash("12345678")
+        )
+
+        db.session.add_all([user1, user2])
+        db.session.commit()
+
+    yield
 
 
 def test_home_page():
